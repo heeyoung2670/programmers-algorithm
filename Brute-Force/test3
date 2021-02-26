@@ -1,0 +1,8 @@
+# 카펫
+def solution(brown, yellow):
+    carpet = brown + yellow
+    for i in range(carpet, 2, -1):
+        if carpet % i == 0:
+            j = carpet//i
+            if yellow == (i-2)*(j-2):
+                return [i, j]
