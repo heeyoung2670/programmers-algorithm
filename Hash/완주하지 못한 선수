@@ -1,0 +1,24 @@
+#include <string>
+#include <vector>
+#include <map>
+
+using namespace std;
+
+string solution(vector<string> participant, vector<string> completion) {
+    string answer = "";
+    
+    map<string, int> map;
+    
+    for(int i = 0; i < participant.size(); i++){
+        map[participant[i]]++;
+    }
+    for(int i = 0; i < completion.size(); i++){
+        map[completion[i]]--;
+    }
+    
+    for(auto iter : map){
+        if(iter.second == 1) answer = iter.first;
+    }
+    
+    return answer;
+}
