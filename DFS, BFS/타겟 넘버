@@ -1,0 +1,24 @@
+#include <string>
+#include <vector>
+
+using namespace std;
+
+int answer = 0;
+void dfs(vector<int> numbers, int target, int p, int temp){
+    if(p == numbers.size()){
+        if(temp == target) answer++;
+        return;
+    }
+    
+    dfs(numbers, target, p+1, temp-numbers[p]);
+    dfs(numbers, target, p+1, temp+numbers[p]);
+    
+    return;
+}
+
+int solution(vector<int> numbers, int target) {
+        
+    dfs(numbers, target, 0, 0);    
+    
+    return answer;
+}
