@@ -1,0 +1,47 @@
+#include <string>
+#include <vector>
+#include <set>
+#include <cmath>
+
+using namespace std;
+
+bool isPrime(int num) {
+	if (num == 0 || num == 1) return false;
+
+	for (int i = 2; i <= sqrt(num); i++) {
+		if (num%i == 0) {
+			return false;
+		}
+	}
+	return true;
+}
+
+bool isVisited[7];
+set<int> s;
+void backtracking(string str, string numbers) {
+	
+	if (str.length() >= 1) {
+		if (isPrime(stoi(str))) s.insert(stoi(str));
+	}
+
+	if (str.length() == numbers.size()) return;
+
+	for (int i = 0; i < numbers.size(); i++) {
+		if (!isVisited[i]) {
+			isVisited[i] = true;
+			backtracking(str + numbers[i], numbers);
+			isVisited[i] = false;
+		}
+	}
+
+	return;
+}
+
+int solution(string numbers) {
+
+	backtracking("", numbers);
+
+	int answer = s.size();
+
+	return answer;
+}
