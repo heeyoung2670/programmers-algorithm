@@ -1,0 +1,31 @@
+#include <string>
+#include <vector>
+#include <queue>
+#include <stack>
+
+using namespace std;
+
+string solution(string number, int k) {
+    string answer = "";
+    
+    stack<char> s;
+
+    for(int i = 0; i < number.length(); i++){
+        while(!s.empty() && s.top() < number[i]){
+            if(k == 0) break;
+            s.pop();
+            k--;
+        }
+        s.push(number[i]);
+    }
+    
+    int N = number.length() - k;
+    while(!s.empty()){
+        answer = s.top() + answer;
+        s.pop();
+    }
+    
+    answer = answer.substr(0, N);
+    
+    return answer;
+}
