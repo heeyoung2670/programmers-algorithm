@@ -1,0 +1,46 @@
+#include <string>
+#include <vector>
+#include <unordered_map>
+#include <algorithm>
+
+using namespace std;
+
+bool compare(pair<string, int> a, pair<string, int> b) {
+	return a.second > b.second;
+}
+
+bool compare_idx (pair<int, int> a, pair<int, int> b) {
+	if (a.second == b.second) {
+		return a.first < b.first;
+	}
+	return a.second > b.second;
+}
+
+vector<int> solution(vector<string> genres, vector<int> plays) {
+	vector<int> answer;
+
+	unordered_map<string, int> um_genre;
+	unordered_map<string, vector<pair<int, int>>> um_idx;
+    
+	for (int i = 0; i < genres.size(); i++) {
+		um_genre[genres[i]] += plays[i];
+		um_idx[genres[i]].push_back({ i, plays[i]});
+	}
+
+	//map을 vector로 변환 후 value를 기준으로 정렬
+	vector<pair<string, int>> v(um_genre.begin(), um_genre.end());
+	sort(v.begin(), v.end(), compare);
+
+	for (auto genre : v) { //genre = pair<string, int>
+		sort(um_idx[genre.first].begin(), um_idx[genre.first].end(), compare_idx);
+		if (um_idx[genre.first].size() >= 2) {
+			answer.push_back(um_idx[genre.first][0].first);
+			answer.push_back(um_idx[genre.first][1].first);
+		}
+		else {
+			answer.push_back(um_idx[genre.first][0].first);
+		}
+	}
+
+	return answer;
+}
