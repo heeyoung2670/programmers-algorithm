@@ -1,0 +1,41 @@
+#include <string>
+#include <vector>
+#include <algorithm>
+
+using namespace std;
+
+int answer = 51;
+bool visited[51];
+
+void dfs(string str, int cnt, string target, vector<string> words) {
+	if (str == target) {
+        answer = min(answer, cnt);
+		return;
+	}
+	for (int i = 0; i < words.size(); i++) {
+		if (visited[i]) continue;
+		int temp = 0;
+		for (int j = 0; j < target.size(); j++) {
+			if (str[j] != words[i][j]) temp++;
+		}
+		if (temp == 1) {
+			visited[i] = true;
+			dfs(words[i], cnt + 1, target, words);
+			visited[i] = false;
+		}
+	}
+    return;
+}
+
+int solution(string begin, string target, vector<string> words) {
+
+	bool check = false;
+	for (int i = 0; i < words.size(); i++) {
+		if (target == words[i]) check = true;
+	}
+	if (!check) return 0;
+
+	dfs(begin, 0, target, words);
+
+	return answer;
+}
