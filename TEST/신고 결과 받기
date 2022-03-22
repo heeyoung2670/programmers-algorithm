@@ -1,0 +1,42 @@
+#include <string>
+#include <vector>
+#include <sstream>
+#include <set>
+#include <unordered_map>
+
+using namespace std;
+
+vector<string> split(string input, char delimiter) {
+    vector<string> result;
+    stringstream ss(input);
+
+    string buf;
+    while (getline(ss, buf, delimiter)) result.push_back(buf);
+
+    return result;
+}
+
+vector<int> solution(vector<string> id_list, vector<string> report, int k) {
+    vector<int> answer;
+
+    unordered_map<string, set<string>> um; //신고당한 유저
+    unordered_map<string, set<string>> um_list; //신고 리스트
+
+    for(int i = 0; i < report.size(); i++){
+        vector<string> result = split(report[i], ' ');
+        um[result[1]].insert(result[0]);
+        um_list[result[0]].insert(result[1]);
+    }
+
+    for(int i = 0; i < id_list.size(); i++){
+        int temp = 0;
+        for(auto iter: um_list[id_list[i]]){
+            if(um[iter].size() >= k){
+                temp++;
+            }
+        }
+        answer.push_back(temp);
+    }
+
+    return answer;
+}
