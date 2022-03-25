@@ -1,0 +1,50 @@
+#include <string>
+#include <vector>
+
+using namespace std;
+
+int dist(int now, int dest){
+    int cal = abs(now - dest);
+    return cal/3 + cal%3;
+}
+
+string solution(vector<int> numbers, string hand) {
+    string answer = "";
+    
+    int now_l = 10, now_r = 12; //*, # 키패드는 각각 10번째, 12번째
+    for(int i = 0; i < numbers.size(); i++){
+        int x = numbers.at(i);
+        if(x == 1 || x == 4 || x == 7){
+            answer += "L";
+            now_l = x;
+        }
+        else if(x == 3 || x == 6 || x == 9){
+            answer += "R";
+            now_r = x;
+        }
+        else{
+            if(x == 0) x = 11; //0번 키패드는 11번째
+            if(dist(now_r, x) < dist(now_l, x)){ //오른손이 더 가까운 경우
+                answer += "R";
+                now_r = x;
+            }
+            else if(dist(now_r, x) > dist(now_l, x)){ //왼손이 더 가까운 경우
+                answer += "L";
+                now_l = x;
+            }
+            else{ //왼손, 오른손 거리가 같은 경우
+                if(hand == "right"){
+                    answer += "R";
+                    now_r = x;
+                }
+                else{
+                    answer += "L";
+                    now_l = x;
+                }
+            }
+        }
+    }
+    
+    
+    return answer;
+}
