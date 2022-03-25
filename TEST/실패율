@@ -1,0 +1,45 @@
+#include <string>
+#include <vector>
+#include <algorithm>
+
+using namespace std;
+
+bool compare(pair<int, double> A, pair<int, double> B){
+    if(A.second == B.second){
+        return A.first < B.first;
+    }
+    return A.second > B.second;
+}
+
+vector<int> solution(int N, vector<int> stages) {
+    vector<int> answer;
+    
+    vector<pair<int, double>> v; //{스테이지, 실패율} 저장
+    
+    for(int i = 1; i <= N; i++){
+        double challenge = 0;
+        double fail = 0;
+        for(int j = 0; j < stages.size(); j++){
+            if(stages[j] > i){
+                challenge++;
+            }
+            else if(stages[j] == i){
+                challenge++;
+                fail++;
+            }
+        }
+        if(challenge == 0){
+            v.push_back({i, 0});
+        }
+        else{
+            v.push_back({i, fail/challenge});
+        }
+    }
+    
+    sort(v.begin(), v.end(), compare);
+    for(int i = 0; i < v.size(); i++){
+        answer.push_back(v[i].first);
+    }
+    
+    return answer;
+}
