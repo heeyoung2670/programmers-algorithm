@@ -1,0 +1,46 @@
+#include <string>
+#include <vector>
+#include <unordered_map>
+#include <sstream>
+
+using namespace std;
+
+vector<string> split(string input, char delimeter){
+    vector<string> result;
+    
+    stringstream ss(input);
+    
+    string buf;
+    while (getline(ss, buf, delimeter)) result.push_back(buf);
+    
+    return result;
+}
+
+vector<string> solution(vector<string> record) {
+    vector<string> answer;
+    
+    unordered_map<string, string> um; //닉네임 저장
+    vector<pair<string, string>> db; //입장, 퇴장 저장
+    
+    for(int i = 0; i < record.size(); i++){
+        vector<string> r = split(record[i], ' ');
+        db.push_back({r[0], r[1]});
+        if(r[0] == "Enter" || r[0] == "Change"){
+            um[r[1]] = r[2];
+        }
+    }
+    
+    for(int i = 0; i < db.size(); i++){
+        string s = um[db[i].second];
+        if(db[i].first == "Enter"){
+            s += "님이 들어왔습니다.";
+            answer.push_back(s);
+        }
+        else if(db[i].first == "Leave"){
+            s += "님이 나갔습니다.";
+            answer.push_back(s);
+        }
+    }
+    
+    return answer;
+}
