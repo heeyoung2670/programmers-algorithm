@@ -1,0 +1,49 @@
+#include <string>
+#include <vector>
+#include <unordered_map>
+#include <algorithm>
+
+using namespace std;
+
+vector<string> answer;
+
+unordered_map<string, vector<string>> um;
+unordered_map<string, vector<bool>> visited;
+
+int dfs(string s, int n, int cnt) {
+	if (cnt == n) {
+		return 0;
+	}
+	for (int i = 0; i < um[s].size(); i++) {
+		if (!visited[s][i]) {
+			visited[s][i] = true;
+			answer.push_back(um[s][i]);
+			if (dfs(um[s][i], n, cnt + 1) == 0) {
+				return 0;
+			}
+			visited[s][i] = false;
+			answer.pop_back();
+		}
+	}
+
+	return 1;
+}
+
+vector<string> solution(vector<vector<string>> tickets) {
+
+	int n = tickets.size();
+	for (int i = 0; i < n; i++) {
+		vector<string> ticket = tickets.at(i);
+		um[ticket[0]].push_back(ticket[1]);
+		visited[ticket[0]].push_back(false);
+	}
+
+	for (auto m : um) {
+		sort(um[m.first].begin(), um[m.first].end()); //알파벳 순으로 정렬
+	}
+
+	answer.push_back("ICN");
+	dfs("ICN", n, 0);
+
+	return answer;
+}
