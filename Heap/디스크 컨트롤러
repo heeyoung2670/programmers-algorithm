@@ -1,0 +1,42 @@
+#include <string>
+#include <vector>
+#include <algorithm>
+#include <queue>
+
+using namespace std;
+
+struct compare {
+	bool operator()(vector<int> a, vector<int> b) {
+		return a[1] > b[1];//작업 소요시간에 대해 오름차순 정렬
+	}
+};
+
+int solution(vector<vector<int>> jobs) {
+	int answer = 0;
+
+	int time = 0, j_idx = 0;
+	priority_queue<vector<int>, vector<vector<int>>, compare> pq; //첫번째 인자는 자료형, 두번째 인자는 컨테이너
+
+	sort(jobs.begin(), jobs.end());
+
+	while (j_idx < jobs.size() || !pq.empty()) {
+		if (j_idx < jobs.size() && jobs[j_idx][0] <= time) { //현재 시간보다 요청 시점이 빠르면
+			pq.push(jobs[j_idx++]); //작업 소요시간이 짧은 순으로 처리
+			continue;
+		}
+
+		if (!pq.empty()) {
+			time += pq.top()[1]; //현재 시간에 작업 소요시간을 더함
+			answer += time - pq.top()[0]; //요청부터 종료까지 계산
+			pq.pop();
+		}
+		else {
+			time = jobs[j_idx][0]; //처리할 요청이 없다면 현재 시간을 다음 요청 시간으로
+		}
+
+	}
+
+	answer /= jobs.size();
+
+	return answer;
+}
