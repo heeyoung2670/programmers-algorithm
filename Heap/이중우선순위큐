@@ -1,0 +1,49 @@
+#include <string>
+#include <vector>
+#include <deque>
+#include <sstream>
+#include <algorithm>
+
+using namespace std;
+
+vector<string> split(string input, char delimiter){
+    vector<string> result;
+    
+    stringstream ss(input);
+    string buf;
+    
+    while(getline(ss, buf, delimiter)) result.push_back(buf);
+    
+    return result;
+}
+
+vector<int> solution(vector<string> operations) {
+    vector<int> answer;
+    
+    deque<int> dq;
+    
+    for(int i = 0; i < operations.size(); i++){
+        vector<string> v = split(operations[i], ' ');
+        if(v[0] == "I"){
+            dq.push_back(stoi(v[1]));
+            sort(dq.begin(), dq.end()); //오름차순 정렬
+        }
+        else{
+            if(v[1] == "1"){
+                if(!dq.empty()) dq.pop_back();
+            }
+            else{
+                if(!dq.empty()) dq.pop_front();
+            }
+        }
+    }
+    
+    if(dq.empty()){
+        answer = {0, 0};
+    }
+    else{
+        answer = {dq.back(), dq.front()};
+    }
+    
+    return answer;
+}
