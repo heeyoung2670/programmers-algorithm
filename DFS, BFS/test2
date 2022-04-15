@@ -1,0 +1,39 @@
+#여행경로
+d = {}
+visited = {}
+answer = []
+
+def backtracking(now, cnt, n):
+    if cnt == n:
+        return 0
+    
+    if now not in d:
+        return 1
+    
+    for i in range(len(d[now])):
+        if(visited[now][i] == False):
+            visited[now][i] = True
+            answer.append(d[now][i])
+            if(backtracking(d[now][i], cnt+1, n) == 0): return 0
+            visited[now][i] = False
+            answer.pop()
+    
+    return 1
+    
+def solution(tickets):
+    
+    for a, b in tickets: #해시로 저장
+        if a not in d:
+            d[a] = [b]
+            visited[a] = [False]
+        else:
+            d[a].append(b)
+            visited[a].append(False)
+    
+    for i in d.keys():
+        d[i].sort() #사전 순 정렬
+    
+    answer.append("ICN")
+    backtracking("ICN", 0, len(tickets)) #출발지, cnt, n
+    
+    return answer
